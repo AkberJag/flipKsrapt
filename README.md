@@ -8,7 +8,7 @@ A python based data mining tool for extracting information from Flipkart. It can
 5.	The average review given on a page
 6.	All the image links of the product listed by the seller
 7.	URL of the product page.
-How fetched information are stored?
+### How fetched information are stored?
 we can get the information in CSV or json format or both, configure it in the config.py file.
 ### Usage:
 1.	search a category in Flipkart eg: “smart phones” and copy the URL 
