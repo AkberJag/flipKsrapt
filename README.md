@@ -10,7 +10,7 @@ What information it fetches?
 7.	URL of the product page.
 How fetched information are stored?
 we can get the information in CSV or json format or both, configure it in the config.py file.
-Usage:
+### Usage:
 1.	search a category in Flipkart eg: “smart phones” and copy the URL 
 2.	paste the URL in ‘url’ variable of `flipksrapt.py`
 3.	run the `flipksrapt.py`
