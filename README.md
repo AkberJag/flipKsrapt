@@ -12,9 +12,13 @@ A python based data mining tool for extracting information from Flipkart. It can
 we can get the information in CSV or json format or both, configure it in the config.py file.
 ### Usage:
 1.	search a category in Flipkart eg: “smart phones” and copy the URL 
-2.	paste the URL in ‘url’ variable of `flipksrapt.py`
-3.	run the `flipksrapt.py`
-4.	Wait... Seriously, you'll need to wait some time [ depends on your internet speed ]
+2.	run the `flipksrapt.py`
+3.	paste the URL when prompted
+4.  choose the required output format
+		- 1 for csv only
+		- 2 for json only
+		- 3 for both csv and json
+5.	Wait... Seriously, you'll need to wait some time [ depends on your internet speed ]
  License:
 FlipKsrapt is released under [The MIT license (MIT)](http://opensource.org/licenses/MIT)
 ---
