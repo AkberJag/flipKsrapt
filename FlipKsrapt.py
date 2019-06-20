@@ -1,7 +1,7 @@
 import pandas, json, requests, csv
 from bs4 import BeautifulSoup
-url = 'https://www.flipkart.com/search?q=smart+phones&sid=tyy%2C4io&as=on&as-show=on&otracker=AS_QueryStore_HistoryAutoSuggest_0_1&otracker1=AS_QueryStore_HistoryAutoSuggest_0_1&as-pos=0&as-type=HISTORY&as-backfill=on&page='
-flipkart = 'https://www.flipkart.com'
+from config import url, flipkart, TITLE, output_files
+
 SlNo = 1 # to print count infrond of product name (console)
 _header = True
 json_data = {}
@@ -24,7 +24,7 @@ def make_csv(datas):
 
     # generating csv file using pandas
     df = pandas.DataFrame(dict)
-    with open('testcsv.csv', 'a', encoding="utf-8", newline='') as csvfile:
+    with open('testcsv.csv', 'w', encoding="utf-8", newline='') as csvfile:
 
         # to check for titile
         if _header is True:
@@ -63,12 +63,18 @@ def product_spider(product_url):
     product_page_soup = BeautifulSoup(get_product_page.text, 'html.parser')
 
     # product name
-    pr_names = str(str(SlNo)+'. ' + product_page_soup.find('span', {'class':'_35KyD6'}).text).replace(',', '')
+    if type(product_page_soup.find('span', {'class':'_35KyD6'})) != type(None):
+        pr_names = str(str(SlNo)+'. ' + product_page_soup.find('span', {'class':'_35KyD6'}).text).replace(',', '')
+    else:
+        pr_names = 'Not available try again'
     SlNo += 1
     print(pr_names)
 
     # user reviews and rating
-    pr_avg_rev = str(product_page_soup.find('div', {'class':'_1i0wk8'}).text) +' stars from '+ str(product_page_soup.find('div', {'class':'row _2yc1Qo'}).text).replace('&', '').replace(',', '')
+    if type(product_page_soup.find('div', {'class':'_1i0wk8'})) != type(None):
+        pr_avg_rev = str(product_page_soup.find('div', {'class':'_1i0wk8'}).text) +' stars from '+ str(product_page_soup.find('div', {'class':'row _2yc1Qo'}).text).replace('&', '').replace(',', '')
+    else:
+        pr_avg_rev = 'Not available try again'
     # print(pr_avg_rev)
 
     # product selling price
@@ -86,7 +92,10 @@ def product_spider(product_url):
     # print(pr_price_original)
 
     # Product Description
-    pr_disc =str(product_page_soup.find('div', {'class':'_1y9a40'}).text).replace(',', ' ').replace('Read More', '').replace('Description', '').replace('NA', 'No discription available').replace('\n', '')
+    if type(product_page_soup.find('div', {'class':'_1y9a40'})) != type(None):
+        pr_disc =str(product_page_soup.find('div', {'class':'_1y9a40'}).text).replace(',', ' ').replace('Read More', '').replace('Description', '').replace('NA', 'No discription available').replace('\n', '')
+    else:
+        pr_disc = 'Not available try again'
     # print(pr_disc)
 
     # specifications with the main heading
@@ -109,9 +118,10 @@ def product_spider(product_url):
         link = div['style'].replace('background-image:url(','').replace('?q=','')
         links.append(str(link)[:-3])
     # print(links)
-    
+
     # call to make csv file
-    make_csv([pr_names,
+    if output_files == 1:
+        make_csv([pr_names,
               pr_avg_rev,
               pr_price_selling,
               pr_price_original,
@@ -121,7 +131,8 @@ def product_spider(product_url):
               [links]])
 
     # call to make json file
-    make_json([pr_names,
+    elif output_files == 2:
+        make_json([pr_names,
               pr_avg_rev,
               pr_price_selling,
               pr_price_original,
@@ -129,6 +140,24 @@ def product_spider(product_url):
               pr_Spec,
               pr_url,
               [links]])
+    else:
+        make_csv([pr_names,
+              pr_avg_rev,
+              pr_price_selling,
+              pr_price_original,
+              pr_disc,
+              pr_Spec,
+              pr_url,
+              [links]])
+        make_json([pr_names,
+              pr_avg_rev,
+              pr_price_selling,
+              pr_price_original,
+              pr_disc,
+              pr_Spec,
+              pr_url,
+              [links]])
+
 
 
 def page_spider():
@@ -155,7 +184,15 @@ def page_spider():
 
 
 if __name__ == '__main__':
-    page_spider()
-    # generating json file
-    with open('data.json', 'w', encoding="utf-8") as jsonfile:
-        json.dump(json_data, jsonfile, indent=2)
+    try:
+        page_spider()
+        # generating json file
+        if output_files >= 2:
+            with open('data.json', 'w', encoding="utf-8") as jsonfile:
+                json.dump(json_data, jsonfile, indent=2)
+    except KeyboardInterrupt:
+        print("\nGood Bye..!")
+    except requests.exceptions.MissingSchema: 
+        print("\nError: Check URL again..!")
+    except:
+        print('some error occurred, try again..')
