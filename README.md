@@ -1,3 +1,6 @@
+:warning: flipkart's code changed, so bugs may occure.
+
+
 # FlipKsrapt
 A python based data mining tool for extracting information from Flipkart. It can loop through a product category and individual products, and fetch information.
 ### What information it fetches?
