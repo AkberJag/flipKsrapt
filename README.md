@@ -1,4 +1,4 @@
-:warning: flipkart's code changed, so bugs may occure.
+:warning: flipkart's code changed, so it may not function as expected, will fix all issues soon 😁
 
 
 # FlipKsrapt
